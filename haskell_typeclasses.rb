@@ -13,9 +13,19 @@ end
 
 module ApplicativeFunctor
   def apply(value) # default definition; may be overridden
+    unless x.respond_to?(:call)
+      raise StandardError, overchaining_error_message
+    end
     self.class.new(self.x.call(value.x))
   end
 
+  def overchaining_error_message
+    "Detected overchaining of #apply on insufficiently curried argument "\
+    "to this ApplicativeFunctor's instantiation.  Only ApplicativeFunctors "\
+    "instantiated with Callables can be applied."
+  end
+  
+  
   def included(obj)
     obj.extend(ClassMethods)
   end
@@ -176,6 +186,13 @@ describe 'Maybe' do
           it 'applies the arguments to the function' do
             _(curried.apply(val1).apply(val2)).must_equal Just.new(3)
             _(curried.apply(val2).apply(val1)).must_equal Just.new(3)
+          end
+
+          it 'complains about overchaining of #apply on a Just whose ctor argument'\
+             'was insufficiently curried' do
+            assert_raises StandardError do 
+              curried.apply(val2).apply(val1).apply(val1)
+            end
           end
         end
 
