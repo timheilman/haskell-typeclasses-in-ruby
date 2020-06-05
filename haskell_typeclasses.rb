@@ -12,8 +12,8 @@ module Functor
 end
 
 module ApplicativeFunctor
-  def apply(app) # default definition; may be overridden
-    self.class.new(self.x.call(app.x))
+  def apply(value) # default definition; may be overridden
+    self.class.new(self.x.call(value.x))
   end
 
   def included(obj)
@@ -72,7 +72,7 @@ class Nothing < Maybe
   end
 
   # overriding the default applicative functor definition
-  def apply(context)
+  def apply(value)
     self
   end
 
@@ -97,9 +97,9 @@ class Just < Maybe
     true
   end
 
-  def apply(app)
-    if app.just?
-      super(app)
+  def apply(value)
+    if value.just?
+      super(value)
     else
       Nothing.new
     end
