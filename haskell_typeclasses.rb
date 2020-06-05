@@ -45,11 +45,11 @@ class Maybe
   end
 
   def just?
-    !nothing?
+    false
   end
 
   def nothing?
-    !just?
+    false
   end
 end
 
