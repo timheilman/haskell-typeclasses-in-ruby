@@ -33,24 +33,6 @@ module Monad
   end
 end
 
-# A functor, applicative functor, and monad that always returns an instance of
-# itself with the operation applied.
-class Identity
-  include Functor
-  include ApplicativeFunctor
-  include Monad
-
-  attr_reader :x
-
-  def self.pure(x)
-    new(x)
-  end
-
-  def initialize(x)
-    @x = x
-  end
-end
-
 # A functor, applicative functor, and monad that behaves like a list containing
 # zero or one elements.
 class Maybe
